@@ -12,6 +12,9 @@ func RunMigrations() {
 		&models.Account{},
 		&models.Category{},
 		&models.Transaction{},
+		&models.Loan{},
+		&models.LoanPayment{},
+		&models.RecurringExpense{},
 	)
 
 	if err != nil {
@@ -20,6 +23,7 @@ func RunMigrations() {
 
 	// Agregar constraints personalizados para transacciones
 	AddTransactionConstraints()
+	AddRecurringExpenseConstraints()
 
 	fmt.Println("Database migrations completed successfully")
 }

@@ -135,3 +135,50 @@ func AddTransactionConstraints() {
 		fmt.Println("Transaction constraints created successfully")
 	}
 }
+
+// Constraints para RecurringExpense
+func AddRecurringExpenseConstraints() {
+	// Frecuencias válidas
+	DB.Exec(`
+		CREATE TRIGGER IF NOT EXISTS check_frequency_insert
+		BEFORE INSERT ON recurring_expenses
+		FOR EACH ROW
+		WHEN NEW.frequency NOT IN ('daily', 'weekly', 'monthly', 'yearly')
+		BEGIN
+			SELECT RAISE(ABORT, 'Frequency must be daily, weekly, monthly, or yearly');
+		END;
+	`)
+
+	DB.Exec(`
+		CREATE TRIGGER IF NOT EXISTS check_frequency_update
+		BEFORE UPDATE ON recurring_expenses
+		FOR EACH ROW
+		WHEN NEW.frequency NOT IN ('daily', 'weekly', 'monthly', 'yearly')
+		BEGIN
+			SELECT RAISE(ABORT, 'Frequency must be daily, weekly, monthly, or yearly');
+		END;
+	`)
+
+	// Amount debe ser positivo
+	DB.Exec(`
+		CREATE TRIGGER IF NOT EXISTS check_amount_positive_insert
+		BEFORE INSERT ON recurring_expenses
+		FOR EACH ROW
+		WHEN NEW.amount <= 0
+		BEGIN
+			SELECT RAISE(ABORT, 'Amount must be positive');
+		END;
+	`)
+
+	DB.Exec(`
+		CREATE TRIGGER IF NOT EXISTS check_amount_positive_update
+		BEFORE UPDATE ON recurring_expenses
+		FOR EACH ROW
+		WHEN NEW.amount <= 0
+		BEGIN
+			SELECT RAISE(ABORT, 'Amount must be positive');
+		END;
+	`)
+
+	fmt.Println("RecurringExpense constraints created successfully")
+}

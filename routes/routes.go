@@ -45,4 +45,17 @@ func SetupRoutes(app *fiber.App) {
 	transactions.Get("/:id", handlers.GetTransaction)
 	transactions.Put("/:id", handlers.UpdateTransaction)
 	transactions.Delete("/:id", handlers.DeleteTransaction)
+
+	// Loan routes (protegidas)
+	loans := api.Group("/loans", middleware.RequireAuth)
+	loans.Post("/", handlers.CreateLoan)
+	loans.Get("/", handlers.GetLoans)
+	loans.Get("/:id", handlers.GetLoan)
+	loans.Put("/:id", handlers.UpdateLoan)
+	loans.Delete("/:id", handlers.DeleteLoan)
+	loans.Post("/:id/payments", handlers.CreateLoanPayment)
+
+	// LoanPayment routes (protegidas)
+	loanPayments := api.Group("/loan-payments", middleware.RequireAuth)
+	loanPayments.Put("/:id/confirm", handlers.ConfirmLoanPayment)
 }
