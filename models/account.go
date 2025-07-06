@@ -31,7 +31,7 @@ type Account struct {
 func (a *Account) GetBalance(db *gorm.DB) float64 {
 	var balance float64
 	db.Table("transactions").
-		Where("account_id = ? AND user_id = ?", a.ID, a.UserID).
+		Where("account_id = ? AND user_id = ? AND deleted_at IS NULL", a.ID, a.UserID).
 		Select("COALESCE(SUM(amount), 0)").
 		Scan(&balance)
 	return balance
