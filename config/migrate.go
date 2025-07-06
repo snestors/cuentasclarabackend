@@ -15,6 +15,7 @@ func RunMigrations() {
 		&models.Loan{},
 		&models.LoanPayment{},
 		&models.RecurringExpense{},
+		&models.Reminder{}, // ✨ NUEVO
 	)
 
 	if err != nil {

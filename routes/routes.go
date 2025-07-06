@@ -58,4 +58,14 @@ func SetupRoutes(app *fiber.App) {
 	// LoanPayment routes (protegidas)
 	loanPayments := api.Group("/loan-payments", middleware.RequireAuth)
 	loanPayments.Put("/:id/confirm", handlers.ConfirmLoanPayment)
+
+	// Recurring Expense routes (protegidas) ✨ NUEVO
+	recurringExpenses := api.Group("/recurring-expenses", middleware.RequireAuth)
+	recurringExpenses.Post("/", handlers.CreateRecurringExpense)
+	recurringExpenses.Get("/", handlers.GetRecurringExpenses)
+	recurringExpenses.Get("/:id", handlers.GetRecurringExpense)
+	recurringExpenses.Put("/:id", handlers.UpdateRecurringExpense)
+	recurringExpenses.Delete("/:id", handlers.DeleteRecurringExpense)
+	recurringExpenses.Post("/:id/execute", handlers.ExecuteRecurringExpense) // ✨ EXECUTE
+
 }

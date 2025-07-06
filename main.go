@@ -6,6 +6,7 @@ import (
 
 	"cuentas-claras/config"
 	"cuentas-claras/routes"
+	"cuentas-claras/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -24,6 +25,10 @@ func main() {
 
 	// Ejecutar migraciones
 	config.RunMigrations()
+
+	// Iniciar job de recordatorios ✨ NUEVO
+	reminderService := &services.ReminderService{}
+	reminderService.StartDailyJob()
 
 	// Crear app Fiber
 	app := fiber.New(fiber.Config{
